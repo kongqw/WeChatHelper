@@ -1,8 +1,31 @@
 # 微信开放平台封装
 
-本库在授权登录部分使用了 Retrofit + RxKotlin
+[![](https://jitpack.io/v/kongqw/WeChatHelper.svg)](https://jitpack.io/#kongqw/WeChatHelper)
 
-## Gradle 配置
+本库在授权登录部分使用了`Retrofit`和`RxKotlin`
+
+To get a Git project into your build:
+
+Step 1. Add the JitPack repository to your build file
+
+``` gradle
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Step 2. Add the dependency
+
+``` gradle
+dependencies {
+        implementation 'com.github.kongqw:WeChatHelper:1.0.0'
+}
+```
+
+Step 3. Add `WECHAT_APP_ID` in app build.gradle
 
 ``` gradle
 android {
