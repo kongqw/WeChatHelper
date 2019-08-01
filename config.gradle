@@ -1,0 +1,21 @@
+project.ext {
+
+    android = [
+            compileSdkVersion: 28,
+            minSdkVersion    : 16,
+            targetSdkVersion : 28,
+            versionCode      : 1,
+            versionName      : "1.0.0"
+    ]
+
+    constants = [
+            applicationId      : "com.kongqw.wechathelper",
+            group              : "com.github.kongqw",
+            WECHAT_APP_ID      : "xxx",
+
+            SIGN_TORE_FILE_PATH: "xxx",
+            SIGN_STORE_PASSWORD: "xxx",
+            SIGN_KEY_ALIAS     : "xxx",
+            SIGN_KEY_PASSWORD  : "xxx"
+    ]
+}
