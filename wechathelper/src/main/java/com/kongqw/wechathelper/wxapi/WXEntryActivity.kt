@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.kongqw.wechathelper.WeChatBaseHelper
 import com.kongqw.wechathelper.net.WeChatHelperRetrofitManager
+import com.kongqw.wechathelper.net.response.AccessTokenInfo
 import com.kongqw.wechathelper.utils.Logger
 import com.kongqw.wechathelper.utils.MetaUtil
 import com.tencent.mm.opensdk.constants.ConstantsAPI
@@ -38,9 +39,11 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
                     // 用户同意了授权
                     BaseResp.ErrCode.ERR_OK -> {
                         val code = (baseResp as? SendAuth.Resp)?.code
+                        var accessToken: AccessTokenInfo? = null
                         // 请求 Access Token
                         WeChatHelperRetrofitManager.getAccessToken(MetaUtil.getWeChatAppId(applicationContext), MetaUtil.getWeChatSecret(applicationContext), code)
                             .filter { accessTokenInfo ->
+                                accessToken = accessTokenInfo
                                 val isSuccess = accessTokenInfo.isSuccess()
                                 if (!isSuccess) {
                                     // 请求AccessToken失败
@@ -54,7 +57,7 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
                             .subscribeBy(
                                 onNext = { weChatUserInfo ->
                                     if (weChatUserInfo.isSuccess()) {
-                                        WeChatBaseHelper.mOnWeChatAuthLoginListener?.onWeChatAuthLoginSuccess(weChatUserInfo)
+                                        WeChatBaseHelper.mOnWeChatAuthLoginListener?.onWeChatAuthLoginSuccess(accessToken, weChatUserInfo)
                                     } else {
                                         WeChatBaseHelper.mOnWeChatAuthLoginListener?.onWeChatAuthLoginError(weChatUserInfo.errcode, weChatUserInfo.errmsg)
                                     }

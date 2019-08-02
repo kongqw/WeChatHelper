@@ -9,8 +9,8 @@ import com.kongqw.wechathelper.WeChatHelper
 import com.kongqw.wechathelper.enums.Scene
 import com.kongqw.wechathelper.listener.OnWeChatAuthLoginListener
 import com.kongqw.wechathelper.listener.OnWeChatShareListener
+import com.kongqw.wechathelper.net.response.AccessTokenInfo
 import com.kongqw.wechathelper.net.response.WeChatUserInfo
-import com.tencent.mm.opensdk.modelmsg.SendAuth
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 
 class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLoginListener {
@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
         Toast.makeText(applicationContext, "开始申请授权登录", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onWeChatAuthLoginSuccess(weChatUserInfo: WeChatUserInfo?) {
-        Toast.makeText(applicationContext, "授权登录成功 : ${weChatUserInfo?.nickname}", Toast.LENGTH_SHORT).show()
+    override fun onWeChatAuthLoginSuccess(accessTokenInfo: AccessTokenInfo?, weChatUserInfo: WeChatUserInfo?) {
+        Toast.makeText(applicationContext, "授权登录成功 : ${weChatUserInfo?.nickname}  access_token = ${accessTokenInfo?.access_token}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onWeChatAuthLoginCancel() {

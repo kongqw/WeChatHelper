@@ -1,5 +1,6 @@
 package com.kongqw.wechathelper.listener
 
+import com.kongqw.wechathelper.net.response.AccessTokenInfo
 import com.kongqw.wechathelper.net.response.WeChatUserInfo
 
 interface OnWeChatAuthLoginListener {
@@ -12,7 +13,7 @@ interface OnWeChatAuthLoginListener {
     /**
      * 微信授权登录成功
      */
-    fun onWeChatAuthLoginSuccess(weChatUserInfo: WeChatUserInfo?)
+    fun onWeChatAuthLoginSuccess(accessTokenInfo: AccessTokenInfo?, weChatUserInfo: WeChatUserInfo?)
 
     /**
      * 用户取消微信授权登录
