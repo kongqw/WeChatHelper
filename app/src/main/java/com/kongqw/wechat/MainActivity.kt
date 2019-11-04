@@ -11,6 +11,7 @@ import com.kongqw.wechathelper.listener.OnWeChatAuthLoginListener
 import com.kongqw.wechathelper.listener.OnWeChatShareListener
 import com.kongqw.wechathelper.net.response.AccessTokenInfo
 import com.kongqw.wechathelper.net.response.WeChatUserInfo
+import com.kongqw.wechathelper.utils.Logger
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 
 class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLoginListener {
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
     }
 
     override fun onWeChatAuthLoginSuccess(accessTokenInfo: AccessTokenInfo?, weChatUserInfo: WeChatUserInfo?) {
+        Logger.d("accessTokenInfo = $accessTokenInfo")
+        Logger.d("weChatUserInfo = $weChatUserInfo")
         Toast.makeText(applicationContext, "授权登录成功 : ${weChatUserInfo?.nickname}  access_token = ${accessTokenInfo?.access_token}", Toast.LENGTH_SHORT).show()
     }
 

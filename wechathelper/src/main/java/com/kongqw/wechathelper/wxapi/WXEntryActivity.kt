@@ -22,15 +22,17 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WXAPIFactory.createWXAPI(this, MetaUtil.getWeChatAppId(applicationContext), true).handleIntent(intent, this)
+        Logger.d("WXEntryActivity onCreate  WeChatAppId = ${MetaUtil.getWeChatAppId(applicationContext)}")
     }
 
     override fun onResume() {
         super.onResume()
+        Logger.d("WXEntryActivity onCreate  onResume")
         finish()
     }
 
     override fun onResp(baseResp: BaseResp?) {
-        Logger.d("onResp  baseResp = $baseResp")
+        Logger.d("WXEntryActivity onResp  baseResp = $baseResp")
 
         when (baseResp?.type) {
             // 授权登录
@@ -105,9 +107,23 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
             }
             // 支付
             ConstantsAPI.COMMAND_PAY_BY_WX -> {
+                when (baseResp.errCode) {
+                    BaseResp.ErrCode.ERR_OK -> WeChatBaseHelper.mOnWeChatPaymentListener?.onWeChatPaymentSuccess()
+                    BaseResp.ErrCode.ERR_USER_CANCEL -> WeChatBaseHelper.mOnWeChatPaymentListener?.onWeChatPaymentCancel()
+                    BaseResp.ErrCode.ERR_AUTH_DENIED -> WeChatBaseHelper.mOnWeChatPaymentListener?.onWeChatPaymentAuthDenied()
+                    else -> {
+                        // intent.action = Config.ACTION_WX_PAY_ERROR
+                        // QCToast.show(applicationContext, "微信未知错误  resp?.errCode = ${resp.errCode}   resp.errStr = ${resp.errStr}")
+                        val errCode = baseResp.errCode
+                        val errStr = baseResp.errStr
+                        Logger.d("errCode = $errCode  errStr = $errStr")
+
+                        WeChatBaseHelper.mOnWeChatPaymentListener?.onWeChatPaymentError(errCode, errStr)
+                    }
+                }
+                WeChatBaseHelper.mOnWeChatPaymentListener = null
             }
         }
-
 
 //        val type1 = resp?.type
 //        val code = resp?.code
@@ -127,11 +143,11 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
     }
 
     override fun onReq(baseReq: BaseReq?) {
-        Logger.d("onReq  baseReq = $baseReq")
+        Logger.d("WXEntryActivity onReq  baseReq = $baseReq")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Logger.d("requestCode = $requestCode  resultCode = $resultCode")
+        Logger.d("WXEntryActivity requestCode = $requestCode  resultCode = $resultCode")
         super.onActivityResult(requestCode, resultCode, data)
     }
 }

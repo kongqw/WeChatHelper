@@ -4,11 +4,15 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.annotation.Nullable
 import com.kongqw.wechathelper.enums.Scene
+import com.kongqw.wechathelper.listener.IPaymentParams
 import com.kongqw.wechathelper.listener.OnWeChatAuthLoginListener
+import com.kongqw.wechathelper.listener.OnWeChatPaymentListener
 import com.kongqw.wechathelper.listener.OnWeChatShareListener
 import com.kongqw.wechathelper.utils.BitmapUtil
+import com.kongqw.wechathelper.utils.Logger
 import com.kongqw.wechathelper.utils.MetaUtil
 import com.tencent.mm.opensdk.modelmsg.*
+import com.tencent.mm.opensdk.modelpay.PayReq
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 
@@ -27,6 +31,7 @@ open class WeChatBaseHelper(context: Context) {
 
         var mOnWeChatShareListener: OnWeChatShareListener? = null
         var mOnWeChatAuthLoginListener: OnWeChatAuthLoginListener? = null
+        var mOnWeChatPaymentListener: OnWeChatPaymentListener? = null
     }
 
     /**
@@ -227,6 +232,26 @@ open class WeChatBaseHelper(context: Context) {
         req.scope = SCOPE
         req.state = STATE
         mOnWeChatAuthLoginListener?.onWeChatAuthLoginStart()
-        api.sendReq(req)
+        val sendReq = api.sendReq(req)
+        Logger.d("authLogin sendReq = $sendReq")
+    }
+
+    /**
+     * 微信支付
+     */
+    fun payment(params: IPaymentParams,listener: OnWeChatPaymentListener) {
+        mOnWeChatPaymentListener = listener
+        val req = PayReq().apply {
+            appId = params.onAppId()
+            partnerId = params.onPartnerId()
+            prepayId = params.onPrepayId()
+            packageValue = params.onPackageValue()
+            nonceStr = params.onNonceStr()
+            timeStamp = params.onTimeStamp()
+            sign = params.onSign()
+        }
+        mOnWeChatPaymentListener?.onWeChatPaymentStart()
+        val sendReq = api.sendReq(req)
+        Logger.d("payment sendReq = $sendReq")
     }
 }
