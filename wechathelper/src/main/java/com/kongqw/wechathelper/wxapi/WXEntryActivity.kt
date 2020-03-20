@@ -105,24 +105,6 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
                 }
                 WeChatBaseHelper.mOnWeChatShareListener = null
             }
-            // 支付
-            ConstantsAPI.COMMAND_PAY_BY_WX -> {
-                when (baseResp.errCode) {
-                    BaseResp.ErrCode.ERR_OK -> WeChatBaseHelper.mOnWeChatPaymentListener?.onWeChatPaymentSuccess()
-                    BaseResp.ErrCode.ERR_USER_CANCEL -> WeChatBaseHelper.mOnWeChatPaymentListener?.onWeChatPaymentCancel()
-                    BaseResp.ErrCode.ERR_AUTH_DENIED -> WeChatBaseHelper.mOnWeChatPaymentListener?.onWeChatPaymentAuthDenied()
-                    else -> {
-                        // intent.action = Config.ACTION_WX_PAY_ERROR
-                        // QCToast.show(applicationContext, "微信未知错误  resp?.errCode = ${resp.errCode}   resp.errStr = ${resp.errStr}")
-                        val errCode = baseResp.errCode
-                        val errStr = baseResp.errStr
-                        Logger.d("errCode = $errCode  errStr = $errStr")
-
-                        WeChatBaseHelper.mOnWeChatPaymentListener?.onWeChatPaymentError(errCode, errStr)
-                    }
-                }
-                WeChatBaseHelper.mOnWeChatPaymentListener = null
-            }
         }
 
 //        val type1 = resp?.type
