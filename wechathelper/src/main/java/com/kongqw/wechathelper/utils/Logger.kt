@@ -1,13 +1,13 @@
 package com.kongqw.wechathelper.utils
 
 import android.util.Log
-import com.kongqw.wechathelper.WeChatHelper
+import com.kongqw.wechathelper.WeChatClient
 
-object Logger {
+internal object Logger {
 
-    fun d(log: String?) {
-        if (WeChatHelper.IS_LOGGABLE) {
-            Log.d("Logger", log)
+    fun i(tag: String, log: String?) {
+        if (WeChatClient.isLoggable) {
+            Log.i(tag, log)
         }
     }
 }

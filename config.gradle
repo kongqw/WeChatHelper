@@ -9,13 +9,14 @@ project.ext {
     ]
 
     constants = [
-            applicationId      : "com.kongqw.wechathelper",
+            applicationId      : "com.magic.furolive",
             group              : "com.github.kongqw",
-            WECHAT_APP_ID      : "xxx",
+            WECHAT_APP_ID      : "wx5f23a456ef881219",
+            WECHAT_APP_SECRET  : "4aefe2073d394be9c3dfe01bb5b482e3",
 
-            SIGN_TORE_FILE_PATH: "xxx",
-            SIGN_STORE_PASSWORD: "xxx",
-            SIGN_KEY_ALIAS     : "xxx",
-            SIGN_KEY_PASSWORD  : "xxx"
+            SIGN_TORE_FILE_PATH: "../signer/furongzhibo.jks",
+            SIGN_STORE_PASSWORD: "furolive2020",
+            SIGN_KEY_ALIAS     : "furolive",
+            SIGN_KEY_PASSWORD  : "furolive2020"
     ]
 }

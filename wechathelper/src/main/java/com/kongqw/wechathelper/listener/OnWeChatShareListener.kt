@@ -36,4 +36,9 @@ interface OnWeChatShareListener {
      * 其他分享错误
      */
     fun onWeChatShareError(resp: SendMessageToWX.Resp?)
+
+    /**
+     * 微信未安装
+     */
+    fun onNotInstall()
 }

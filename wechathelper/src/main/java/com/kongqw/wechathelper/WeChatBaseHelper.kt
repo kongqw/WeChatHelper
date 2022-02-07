@@ -1,6 +1,5 @@
 package com.kongqw.wechathelper
 
-import android.R.attr
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
@@ -20,33 +19,45 @@ import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 
-import android.R.attr.bitmap
-import android.util.Log
-
-
-open class WeChatBaseHelper(val context: Context) {
+internal class WeChatBaseHelper(val context: Context) {
 
     // 微信 APP ID
-    protected val mWeChatAppId = MetaUtil.getWeChatAppId(context)
+    private val mWeChatAppId = MetaUtil.getWeChatAppId(context)
 
     // 通过WXAPIFactory工厂，获取IWXAPI的实例
-    protected val api: IWXAPI = WXAPIFactory.createWXAPI(context, mWeChatAppId, true)
+    private val api: IWXAPI = WXAPIFactory.createWXAPI(context, mWeChatAppId, true)
 
     companion object {
 
+        private val TAG = WeChatBaseHelper::class.java.simpleName
+
         private const val SCOPE = "snsapi_userinfo"
         private const val STATE = "lls_engzo_wechat_login"
-        private const val THUMB_SIZE = 150
+        const val THUMB_SIZE = 150
 
         var mOnWeChatShareListener: OnWeChatShareListener? = null
         var mOnWeChatAuthLoginListener: OnWeChatAuthLoginListener? = null
         var mOnWeChatPaymentListener: OnWeChatPaymentListener? = null
     }
 
+    private fun registerApp(listener: (() -> Unit)) {
+        if (WeChatClient.isRegistered) {
+            listener()
+            return
+        }
+        // 将应用的appId注册到微信
+        WeChatClient.isRegistered = api.registerApp(mWeChatAppId)
+        listener()
+    }
+
     /**
      * 分享文字内容
      */
     fun shareText(content: String, scene: Scene, listener: OnWeChatShareListener): Boolean {
+
+        val isInitWeChat = api.registerApp(mWeChatAppId)
+        Logger.i(TAG, "isInitWeChat = $isInitWeChat  mWeChatAppId = $mWeChatAppId")
+
         mOnWeChatShareListener = listener
         // 设置分享文字
         val textObj = WXTextObject().apply {
@@ -67,7 +78,6 @@ open class WeChatBaseHelper(val context: Context) {
         return api.sendReq(req)
     }
 
-
     /**
      * 分享图片
      */
@@ -78,6 +88,9 @@ open class WeChatBaseHelper(val context: Context) {
         @Nullable thumbWidth: Int = THUMB_SIZE,
         @Nullable thumbHeight: Int = THUMB_SIZE
     ): Boolean {
+        val isInitWeChat = api.registerApp(mWeChatAppId)
+        Logger.i(TAG, "isInitWeChat = $isInitWeChat  mWeChatAppId = $mWeChatAppId")
+
         return if (isSupportFileProvider()) {
             shareImageByFileProvider(bmp, scene, listener, thumbWidth, thumbHeight)
         } else {
@@ -95,6 +108,9 @@ open class WeChatBaseHelper(val context: Context) {
         @Nullable thumbWidth: Int = THUMB_SIZE,
         @Nullable thumbHeight: Int = THUMB_SIZE
     ): Boolean {
+        val isInitWeChat = api.registerApp(mWeChatAppId)
+        Logger.i(TAG, "isInitWeChat = $isInitWeChat  mWeChatAppId = $mWeChatAppId")
+
         mOnWeChatShareListener = listener
         //初始化 WXImageObject 和 WXMediaMessage 对象
         val imgObj = WXImageObject(bmp)
@@ -129,6 +145,9 @@ open class WeChatBaseHelper(val context: Context) {
         @Nullable thumbWidth: Int = THUMB_SIZE,
         @Nullable thumbHeight: Int = THUMB_SIZE
     ): Boolean {
+        val isInitWeChat = api.registerApp(mWeChatAppId)
+        Logger.i(TAG, "isInitWeChat = $isInitWeChat  mWeChatAppId = $mWeChatAppId")
+
         mOnWeChatShareListener = listener
 
         FileUtils.saveBitmap(context, bmp) { isSuccess, file ->
@@ -174,6 +193,8 @@ open class WeChatBaseHelper(val context: Context) {
         @Nullable thumbWidth: Int = THUMB_SIZE,
         @Nullable thumbHeight: Int = THUMB_SIZE
     ): Boolean {
+        val isInitWeChat = api.registerApp(mWeChatAppId)
+        Logger.i(TAG, "isInitWeChat = $isInitWeChat  mWeChatAppId = $mWeChatAppId")
         mOnWeChatShareListener = listener
         // 初始化一个WXMusicObject，填写url
         val music = WXMusicObject().apply {
@@ -218,6 +239,8 @@ open class WeChatBaseHelper(val context: Context) {
         @Nullable thumbWidth: Int = THUMB_SIZE,
         @Nullable thumbHeight: Int = THUMB_SIZE
     ): Boolean {
+        val isInitWeChat = api.registerApp(mWeChatAppId)
+        Logger.i(TAG, "isInitWeChat = $isInitWeChat  mWeChatAppId = $mWeChatAppId")
         mOnWeChatShareListener = listener
         //初始化一个WXVideoObject，填写url
         val video = WXVideoObject().apply {
@@ -262,6 +285,8 @@ open class WeChatBaseHelper(val context: Context) {
         @Nullable thumbWidth: Int = THUMB_SIZE,
         @Nullable thumbHeight: Int = THUMB_SIZE
     ): Boolean {
+        val isInitWeChat = api.registerApp(mWeChatAppId)
+        Logger.i(TAG, "isInitWeChat = $isInitWeChat  mWeChatAppId = $mWeChatAppId")
         mOnWeChatShareListener = listener
         // 初始化一个WXWebpageObject，填写url
         val webpage = WXWebpageObject().apply {
@@ -294,19 +319,23 @@ open class WeChatBaseHelper(val context: Context) {
      * 授权登录
      */
     fun authLogin(listener: OnWeChatAuthLoginListener) {
+        val isInitWeChat = api.registerApp(mWeChatAppId)
+        Logger.i(TAG, "isInitWeChat = $isInitWeChat  mWeChatAppId = $mWeChatAppId")
         mOnWeChatAuthLoginListener = listener
         val req = SendAuth.Req()
         req.scope = SCOPE
         req.state = STATE
         mOnWeChatAuthLoginListener?.onWeChatAuthLoginStart()
         val sendReq = api.sendReq(req)
-        Logger.d("authLogin sendReq = $sendReq")
+        Logger.i(TAG, "authLogin sendReq = $sendReq")
     }
 
     /**
      * 微信支付
      */
     fun payment(params: IPaymentParams, listener: OnWeChatPaymentListener) {
+        val isInitWeChat = api.registerApp(mWeChatAppId)
+        Logger.i(TAG, "isInitWeChat = $isInitWeChat  mWeChatAppId = $mWeChatAppId")
         mOnWeChatPaymentListener = listener
         val req = PayReq().apply {
             appId = params.onAppId()
@@ -319,7 +348,7 @@ open class WeChatBaseHelper(val context: Context) {
         }
         mOnWeChatPaymentListener?.onWeChatPaymentStart()
         val sendReq = api.sendReq(req)
-        Logger.d("payment sendReq = $sendReq")
+        Logger.i(TAG, "payment sendReq = $sendReq")
     }
 
 

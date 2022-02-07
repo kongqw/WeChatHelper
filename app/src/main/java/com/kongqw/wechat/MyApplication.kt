@@ -1,7 +1,7 @@
 package com.kongqw.wechat
 
 import android.app.Application
-import com.kongqw.wechathelper.WeChatHelper
+import com.kongqw.wechathelper.WeChatClient
 
 class MyApplication : Application() {
 
@@ -15,6 +15,8 @@ class MyApplication : Application() {
 //        LeakCanary.install(this)
 
         // init Library
-        WeChatHelper.getInstance(applicationContext).init(BuildConfig.DEBUG)
+//        WeChatHelper.getInstance(applicationContext).init(BuildConfig.DEBUG)
+
+        WeChatClient.init(applicationContext, BuildConfig.DEBUG)
     }
 }

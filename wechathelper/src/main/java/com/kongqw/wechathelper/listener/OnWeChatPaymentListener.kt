@@ -27,4 +27,9 @@ interface OnWeChatPaymentListener {
      * 微信支付错误
      */
     fun onWeChatPaymentError(errorCode: Int?, errorMessage: String?)
+
+    /**
+     * 微信未安装
+     */
+    fun onNotInstall()
 }

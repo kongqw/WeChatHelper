@@ -19,20 +19,24 @@ import io.reactivex.rxkotlin.subscribeBy
 
 class WXEntryActivity : Activity(), IWXAPIEventHandler {
 
+    companion object {
+        private val TAG = WXEntryActivity::class.java.simpleName
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WXAPIFactory.createWXAPI(this, MetaUtil.getWeChatAppId(applicationContext), true).handleIntent(intent, this)
-        Logger.d("WXEntryActivity onCreate  WeChatAppId = ${MetaUtil.getWeChatAppId(applicationContext)}")
+        Logger.i(TAG, "onCreate  WeChatAppId = ${MetaUtil.getWeChatAppId(applicationContext)}")
     }
 
     override fun onResume() {
         super.onResume()
-        Logger.d("WXEntryActivity onCreate  onResume")
+        Logger.i(TAG, "onResume()")
         finish()
     }
 
     override fun onResp(baseResp: BaseResp?) {
-        Logger.d("WXEntryActivity onResp  baseResp = $baseResp")
+        Logger.i(TAG, "onResp($baseResp)")
 
         when (baseResp?.type) {
             // 授权登录
@@ -125,11 +129,11 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
     }
 
     override fun onReq(baseReq: BaseReq?) {
-        Logger.d("WXEntryActivity onReq  baseReq = $baseReq")
+        Logger.i(TAG, "onReq($baseReq)")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Logger.d("WXEntryActivity requestCode = $requestCode  resultCode = $resultCode")
+        Logger.i(TAG, "onActivityResult($requestCode, $resultCode, $data)")
         super.onActivityResult(requestCode, resultCode, data)
     }
 }

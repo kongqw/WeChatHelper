@@ -2,8 +2,6 @@ package com.kongqw.wechathelper.utils
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.kongqw.wechathelper.net.WeChatHelperRetrofitManager
-import com.kongqw.wechathelper.net.WeChatRetrofitMethods
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -16,7 +14,7 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 
 
-object FileUtils {
+internal object FileUtils {
 
     /**
      * 将图片保存到沙盒

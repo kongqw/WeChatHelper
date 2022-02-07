@@ -11,9 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data
-            android:name="wechat_app_secret"
-            android:value="申请的app_secret" />
 
         <activity android:name=".MainActivity">
             <intent-filter>

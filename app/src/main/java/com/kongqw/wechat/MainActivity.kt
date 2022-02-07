@@ -3,15 +3,15 @@ package com.kongqw.wechat
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.kongqw.wechathelper.WeChatHelper
+import com.kongqw.wechathelper.WeChatClient
 import com.kongqw.wechathelper.enums.Scene
 import com.kongqw.wechathelper.listener.OnWeChatAuthLoginListener
 import com.kongqw.wechathelper.listener.OnWeChatShareListener
 import com.kongqw.wechathelper.net.response.AccessTokenInfo
 import com.kongqw.wechathelper.net.response.WeChatUserInfo
-import com.kongqw.wechathelper.utils.Logger
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 
 class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLoginListener {
@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
     }
 
     override fun onWeChatAuthLoginSuccess(accessTokenInfo: AccessTokenInfo?, weChatUserInfo: WeChatUserInfo?) {
-        Logger.d("accessTokenInfo = $accessTokenInfo")
-        Logger.d("weChatUserInfo = $weChatUserInfo")
+        Log.d("MainActivity", "accessTokenInfo = $accessTokenInfo")
+        Log.d("MainActivity", "weChatUserInfo = $weChatUserInfo")
         Toast.makeText(applicationContext, "授权登录成功 : ${weChatUserInfo?.nickname}  access_token = ${accessTokenInfo?.access_token}", Toast.LENGTH_SHORT).show()
     }
 
@@ -62,6 +62,10 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
         Toast.makeText(applicationContext, "分享异常", Toast.LENGTH_SHORT).show()
     }
 
+    override fun onNotInstall() {
+        Toast.makeText(applicationContext, "微信未安装", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -71,21 +75,24 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      * 分享文字到朋友圈
      */
     fun onShareTextToTimeLine(view: View) {
-        WeChatHelper.getInstance(applicationContext).shareText("我分享了文字到朋友圈", Scene.Timeline, this)
+        // WeChatHelper.getInstance(applicationContext).shareText("我分享了文字到朋友圈", Scene.Timeline, this)
+        WeChatClient.shareText("我分享了文字到朋友圈", Scene.Timeline, this)
     }
 
     /**
      * 分享文字到收藏夹
      */
     fun onShareTextToFavorite(view: View) {
-        WeChatHelper.getInstance(applicationContext).shareText("我分享了文字到收藏夹", Scene.Favorite, this)
+        // WeChatHelper.getInstance(applicationContext).shareText("我分享了文字到收藏夹", Scene.Favorite, this)
+        WeChatClient.shareText("我分享了文字到收藏夹", Scene.Favorite, this)
     }
 
     /**
      * 分享文字给联系人
      */
     fun onShareTextToSession(view: View) {
-        WeChatHelper.getInstance(applicationContext).shareText("我分享了文字给好友", Scene.Session, this)
+        // WeChatHelper.getInstance(applicationContext).shareText("我分享了文字给好友", Scene.Session, this)
+        WeChatClient.shareText("我分享了文字给好友", Scene.Session, this)
     }
 
     /**
@@ -93,7 +100,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareImageToTimeLine(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareImage(bmp, Scene.Timeline, this)
+        // WeChatHelper.getInstance(applicationContext).shareImage(bmp, Scene.Timeline, this)
+        WeChatClient.shareImage(bmp, Scene.Timeline, this)
     }
 
     /**
@@ -101,7 +109,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareImageToFavorite(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareImage(bmp, Scene.Favorite, this)
+        // WeChatHelper.getInstance(applicationContext).shareImage(bmp, Scene.Favorite, this)
+        WeChatClient.shareImage(bmp, Scene.Favorite, this)
     }
 
     /**
@@ -109,7 +118,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareImageToSession(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareImage(bmp, Scene.Session, this)
+        // WeChatHelper.getInstance(applicationContext).shareImage(bmp, Scene.Session, this)
+        WeChatClient.shareImage(bmp, Scene.Session, this)
     }
 
     /**
@@ -117,7 +127,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareMusicToTimeLine(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareMusic(
+        // WeChatHelper.getInstance(applicationContext).shareMusic(
+        WeChatClient.shareMusic(
             bmp,
             Scene.Timeline,
             "http://m10.music.126.net/20190402151400/39f1d995f4b2d48efa312d1ecb71550f/ymusic/363b/72ef/7661/0b373b6cdfc54e3022ef436c3ad58ec3.mp3",
@@ -132,7 +143,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareMusicToFavorite(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareMusic(
+        // WeChatHelper.getInstance(applicationContext).shareMusic(
+        WeChatClient.shareMusic(
             bmp,
             Scene.Favorite,
             "http://m10.music.126.net/20190402151400/39f1d995f4b2d48efa312d1ecb71550f/ymusic/363b/72ef/7661/0b373b6cdfc54e3022ef436c3ad58ec3.mp3",
@@ -147,7 +159,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareMusicToSession(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareMusic(
+        // WeChatHelper.getInstance(applicationContext).shareMusic(
+        WeChatClient.shareMusic(
             bmp,
             Scene.Session,
             "http://m10.music.126.net/20190402151400/39f1d995f4b2d48efa312d1ecb71550f/ymusic/363b/72ef/7661/0b373b6cdfc54e3022ef436c3ad58ec3.mp3",
@@ -162,7 +175,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareVideoToTimeLine(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareVideo(
+        // WeChatHelper.getInstance(applicationContext).shareVideo(
+        WeChatClient.shareVideo(
             bmp,
             Scene.Timeline,
             "https://github.com/kongqw/OpenCVForAndroid/blob/opencv3.2.0/mp4/ObjectDetecting.mp4",
@@ -177,7 +191,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareVideoToFavorite(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareVideo(
+        // WeChatHelper.getInstance(applicationContext).shareVideo(
+        WeChatClient.shareVideo(
             bmp,
             Scene.Favorite,
             "https://github.com/kongqw/OpenCVForAndroid/blob/opencv3.2.0/mp4/ObjectDetecting.mp4",
@@ -192,7 +207,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareVideoToSession(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareVideo(
+        // WeChatHelper.getInstance(applicationContext).shareVideo(
+        WeChatClient.shareVideo(
             bmp,
             Scene.Session,
             "https://github.com/kongqw/OpenCVForAndroid/blob/opencv3.2.0/mp4/ObjectDetecting.mp4",
@@ -207,7 +223,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareWebPageToTimeLine(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareWebPage(
+        // WeChatHelper.getInstance(applicationContext).shareWebPage(
+        WeChatClient.shareWebPage(
             bmp,
             Scene.Timeline,
             "https://github.com/kongqw",
@@ -222,7 +239,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareWebPageToFavorite(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareWebPage(
+        // WeChatHelper.getInstance(applicationContext).shareWebPage(
+        WeChatClient.shareWebPage(
             bmp,
             Scene.Favorite,
             "https://github.com/kongqw",
@@ -237,7 +255,8 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      */
     fun onShareWebPageToSession(view: View) {
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share)
-        WeChatHelper.getInstance(applicationContext).shareWebPage(
+        // WeChatHelper.getInstance(applicationContext).shareWebPage(
+        WeChatClient.shareWebPage(
             bmp,
             Scene.Session,
             "https://github.com/kongqw",
@@ -251,6 +270,7 @@ class MainActivity : AppCompatActivity(), OnWeChatShareListener, OnWeChatAuthLog
      * 授权登录
      */
     fun onAuthLogin(view: View) {
-        WeChatHelper.getInstance(applicationContext).authLogin(this)
+        // WeChatHelper.getInstance(applicationContext).authLogin(this)
+        WeChatClient.authLogin(this)
     }
 }

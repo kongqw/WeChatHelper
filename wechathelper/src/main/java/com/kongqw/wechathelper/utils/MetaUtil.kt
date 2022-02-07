@@ -3,7 +3,7 @@ package com.kongqw.wechathelper.utils
 import android.content.Context
 import android.content.pm.PackageManager
 
-object MetaUtil {
+internal object MetaUtil {
 
     /**
      * 读取AppMetaData信息

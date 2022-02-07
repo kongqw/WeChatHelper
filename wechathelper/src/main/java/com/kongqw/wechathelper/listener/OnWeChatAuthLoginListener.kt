@@ -30,4 +30,9 @@ interface OnWeChatAuthLoginListener {
      * 微信授权登录错误
      */
     fun onWeChatAuthLoginError(errorCode: Int?, errorMessage: String?)
+
+    /**
+     * 微信未安装
+     */
+    fun onNotInstall()
 }

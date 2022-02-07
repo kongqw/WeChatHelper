@@ -21,17 +21,17 @@ class WXPayEntryActivity : Activity(), IWXAPIEventHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WXAPIFactory.createWXAPI(this, MetaUtil.getWeChatAppId(applicationContext), true).handleIntent(intent, this)
-        Logger.d("$TAG WeChatAppId = ${MetaUtil.getWeChatAppId(applicationContext)}")
+        Logger.i(TAG, "onCreate WeChatAppId = ${MetaUtil.getWeChatAppId(applicationContext)}")
     }
 
     override fun onResume() {
         super.onResume()
-        Logger.d("$TAG onResume")
+        Logger.i(TAG, "onResume")
         finish()
     }
 
     override fun onResp(baseResp: BaseResp?) {
-        Logger.d("$TAG onResp baseResp = $baseResp")
+        Logger.i(TAG, "onResp($baseResp)")
         when (baseResp?.type) {
             // 支付
             ConstantsAPI.COMMAND_PAY_BY_WX -> {
@@ -44,7 +44,7 @@ class WXPayEntryActivity : Activity(), IWXAPIEventHandler {
                         // QCToast.show(applicationContext, "微信未知错误  resp?.errCode = ${resp.errCode}   resp.errStr = ${resp.errStr}")
                         val errCode = baseResp.errCode
                         val errStr = baseResp.errStr
-                        Logger.d("$TAG errCode = $errCode  errStr = $errStr")
+                        Logger.i(TAG, "errCode = $errCode  errStr = $errStr")
 
                         WeChatBaseHelper.mOnWeChatPaymentListener?.onWeChatPaymentError(errCode, errStr)
                     }
@@ -55,11 +55,11 @@ class WXPayEntryActivity : Activity(), IWXAPIEventHandler {
     }
 
     override fun onReq(baseReq: BaseReq?) {
-        Logger.d("$TAG onReq  baseReq = $baseReq")
+        Logger.i(TAG, "onReq($baseReq)")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Logger.d("$TAG requestCode = $requestCode resultCode = $resultCode")
+        Logger.i(TAG, "onActivityResult($requestCode, $resultCode, $data)")
         super.onActivityResult(requestCode, resultCode, data)
     }
 }

@@ -34,6 +34,9 @@
             android:name="wechat_app_id"
             android:value="${WECHAT_APP_ID}" />
 
+        <meta-data
+            android:name="wechat_app_secret"
+            android:value="${WECHAT_APP_SECRET}" />
 
         <provider
             android:name=".utils.WeChatShareProvider"
